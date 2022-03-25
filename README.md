@@ -12,7 +12,7 @@ $ npm install parse-context --save
 ### Usage:
 
 ```typescript
-import f, { register } from "nthity-ctx";
+import f, { register } from "parse-context";
 
 const now = new Date(Date.now());
 const data = {
