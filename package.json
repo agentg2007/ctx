@@ -1,5 +1,5 @@
 {
-	"name": "nthity-ctx",
+	"name": "parse-context",
 	"description": "Context based parsing.",
 	"version": "1.0.0",
 	"main": "dist/index.js",

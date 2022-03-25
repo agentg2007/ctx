@@ -1,7 +1,13 @@
-# ctx
+# parse-context
 
 Context based parsing.
 Gets the value of your object based on the string format.
+
+### Install with npm
+
+```bash
+$ npm install parse-context --save
+```
 
 ### Usage:
 
