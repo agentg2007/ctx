@@ -1,0 +1,33 @@
+{
+	"name": "@nthity/ctx",
+	"description": "Context based parsing.",
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"build": "tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/agentg2007/ctx.git"
+	},
+	"keywords": [
+		"context-parser",
+		"string-parser"
+	],
+	"author": "agentg2007",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/agentg2007/ctx/issues"
+	},
+	"homepage": "https://github.com/agentg2007/ctx#readme",
+	"dependencies": {
+		"lodash": "^4.17.21"
+	},
+	"devDependencies": {
+		"@types/lodash": "^4.14.180",
+		"typescript": "^4.6.3"
+	}
+}
