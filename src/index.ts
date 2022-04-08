@@ -2,8 +2,19 @@ import _, { Dictionary } from "lodash";
 
 const EmptyFunc = () => "";
 
+const GlobalRegistry: Dictionary<() => any> = {};
+/**
+ * Registers method globally.
+ * @param name Name of the function.
+ * @param action Method to register.
+ */
+export const globalFunc = (name: string, action: () => any) => {
+    GlobalRegistry[name] = action;
+}
+
 export default () => {
     const Funcs: Dictionary<() => any> = {};
+    const func = (name: string) => Funcs[name] ?? GlobalRegistry[name] ?? EmptyFunc;
     const register = (name: string, action: () => any) => {
         Funcs[name] = action;
         return { register };
@@ -23,7 +34,7 @@ export default () => {
         keys.forEach(({ Full, Data }) => {
             if (_.startsWith(Data, "Func:")) {
                 const name = _.split(Data, ':')[1]
-                result = result.replace(Full, (Funcs[name] ?? EmptyFunc)());
+                result = result.replace(Full, func(name)());
             } else {
                 result = result.replace(Full, _.at(context, [Data])[0] as any ?? "");
             }

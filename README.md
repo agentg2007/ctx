@@ -33,3 +33,37 @@ const stringFormat =
 //Hello, Mr. Anderson. Hello world!
 console.log(parser(data, stringFormat));
 ```
+
+### Release Note:
+
+#### V2.1.0
+
+- Added global method registration.
+
+```typescript
+import ctx, { globalFunc } from "parse-context";
+
+const { parse, register } = ctx();
+
+globalFunc("MyGlobalMethod", () => "My global method.");
+register("MyLocalMethod", () => "This is a local method.");
+```
+
+#### V2.0.0
+
+- **<span style='color: red'>Breaking Change:</span>** Parse and register are now generated using default.
+
+```typescript
+import ctx from "parse-context";
+
+const { parse, register } = ctx();
+```
+
+- **<span style='color: red'>Breaking Change:</span>** Parsing using default is not supported anymore.
+
+```typescript
+import parse from "parse-context";
+
+//WRONG - will generate error.
+parse({ Data: "Test data" }, "${Data}");
+```
