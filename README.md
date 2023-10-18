@@ -36,6 +36,26 @@ console.log(parser(data, stringFormat));
 
 ### Release Note:
 
+#### V2.2.0
+
+- Added extension method registration.
+
+```typescript
+import ctx, { extend } from "parse-context";
+
+extend("Ext", function (args) {
+  return args.context[args.data];
+});
+
+const { parser } = ctx();
+const data = {
+  Word: "Foobar",
+  Hello: "Hello",
+};
+// Result: Hello Foobar.
+console.log(parser(data, "${Ext:Hello} ${Ext:Word}."));
+```
+
 #### V2.1.0
 
 - Added global method registration.
