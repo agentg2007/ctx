@@ -1,14 +1,15 @@
 {
 	"name": "parse-context",
 	"description": "Context based parsing.",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"main": "dist/index.js",
 	"directories": {
 		"test": "test"
 	},
 	"scripts": {
 		"build": "tsc",
-		"prepublish": "npm run build"
+		"prepublish": "npm run build",
+		"publish": "clear && npm run prepublish && npm publish"
 	},
 	"repository": {
 		"type": "git",

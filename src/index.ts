@@ -2,8 +2,7 @@ import _, { Dictionary } from "lodash";
 
 const EmptyFunc = () => "";
 
-type ParserMethod = () => string;
-type ParserMethodWithOptions = (options: ParserMethodOptions) => string;
+type ParserMethod = (options: ParserMethodOptions) => string;
 type ParserMethodOptions = {
     context: any;
     currentValue: string;
@@ -20,7 +19,7 @@ export const globalFunc = (name: string, action: ParserMethod) => {
     GlobalRegistry[name] = action;
 }
 
-const ExtendCallbackRegistry: Dictionary<ParserMethodWithOptions> = {};
+const ExtendCallbackRegistry: Dictionary<ParserMethod> = {};
 /**
  * Registers an extension method that will be called if parsing starts with the prefix.
  * @param prefix Prefix to match.
@@ -34,7 +33,7 @@ const ExtendCallbackRegistry: Dictionary<ParserMethodWithOptions> = {};
  * console.log(parser({ CallMe: "Calling you!" }, "${My:CallMe}"))
  * ```
  */
-export function extend(prefix: string, callback: ParserMethodWithOptions) {
+export function extend(prefix: string, callback: ParserMethod) {
     if (prefix === "Func") {
         throw new Error("Func is a reserved prefix. Please use globalFunc if you intend to register a function.");
     }
@@ -70,7 +69,7 @@ export default () => {
             }
             if (_.startsWith(Data, "Func:")) {
                 const name = _.split(Data, ':')[1]
-                result = result.replace(Full, func(name)());
+                result = result.replace(Full, func(name)(options));
             } else {
                 const extension = extKeys.find(key => _.startsWith(Data, `${key}:`)) ?? "";
                 if (_.isFunction(ExtendCallbackRegistry[extension])) {

@@ -36,7 +36,7 @@ console.log(parser(data, stringFormat));
 
 ### Release Note:
 
-#### V2.2.0
+#### V2.2.1
 
 - Added extension method registration.
 
@@ -56,6 +56,19 @@ const data = {
 console.log(parser(data, "${Ext:Hello} ${Ext:Word}."));
 ```
 
+- **register** method has now ParserMethodOptions.
+
+##### ParserMethodOptions
+
+| Property     | Data Type | Description                                         |
+| ------------ | --------- | --------------------------------------------------- |
+| context      | object    | Object context of the parser.                       |
+| currentValue | string    | Current parser value before ParserMethod is called. |
+| data         | string    | Data of the parsed key.                             |
+| matchKey     | string    | Full parser regex match value.                      |
+
+---
+
 #### V2.1.0
 
 - Added global method registration.
@@ -68,6 +81,8 @@ const { parse, register } = ctx();
 globalFunc("MyGlobalMethod", () => "My global method.");
 register("MyLocalMethod", () => "This is a local method.");
 ```
+
+---
 
 #### V2.0.0
 
