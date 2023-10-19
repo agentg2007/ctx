@@ -8,8 +8,7 @@
 	},
 	"scripts": {
 		"build": "tsc",
-		"prepublish": "npm run build",
-		"publish": "clear && npm run prepublish && npm publish"
+		"prepublish": "npm run build"
 	},
 	"repository": {
 		"type": "git",
