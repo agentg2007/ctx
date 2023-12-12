@@ -36,6 +36,42 @@ console.log(parser(data, stringFormat));
 
 ### Release Note:
 
+### V2.3.0
+
+- Added ParserOptions.
+
+```typescript
+const context = {
+  Data: {
+    Found: "This is existing.",
+  },
+};
+///Result: This is existing. Value of '${Data.Missing}' is missing!
+console.log(
+  parser(context, "${Data.Found} ${Data.Missing}", {
+    onContextNotFound(options) {
+      return `Value of '${options.matchKey}' is missing!`;
+    },
+  })
+);
+```
+
+- Added rescan feature. Ability to rescan the result for more matches.
+
+```typescript
+const context = {
+  Data1: "Data#1 ==>> ${Data2}",
+  Data2: "Data#2 ==>> ${Data3}",
+  Data3: "Data#3 ==>> ${Data4}",
+  Data4: "Data#4 ==>> ${Data5}",
+  Data5: "Data#5 ==>> ${Data6}",
+};
+//returns: Data#1 ==>> Data#2 ==>> Data#3 ==>> ${Data4}
+console.log(parser(context, "${Data1}", { scans: 3 }));
+```
+
+---
+
 #### V2.2.1
 
 - Added extension method registration.

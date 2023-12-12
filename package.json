@@ -1,7 +1,7 @@
 {
 	"name": "parse-context",
 	"description": "Context based parsing.",
-	"version": "2.2.1",
+	"version": "2.3.0",
 	"main": "dist/index.js",
 	"directories": {
 		"test": "test"

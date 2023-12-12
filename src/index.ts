@@ -40,25 +40,40 @@ export function extend(prefix: string, callback: ParserMethod) {
     ExtendCallbackRegistry[prefix] = callback;
 }
 
+type ParserOptions = {
+    /**
+     * Number of scan limit to re-scan the resulting value.
+     * If no more matches before scan limit is reached, the re-scanning process will terminate.
+     * If scans is greater than zero (0), onNotFound method will default return the matched key.
+     */
+    scans: number;
+    /**
+     * Method to execute if value is not found in the context.
+     * @param options - Type of ParserMethodOptions.
+     * @returns string - Default: Blank string if scans is zero, otherwise it will return matched key.
+     */
+    onNotFound: ParserMethod;
+};
 export default () => {
     const Funcs: Dictionary<ParserMethod> = {};
     const func = (name: string) => Funcs[name] ?? GlobalRegistry[name] ?? EmptyFunc;
-    const register = (name: string, action: ParserMethod) => {
+    function register(name: string, action: ParserMethod) {
         Funcs[name] = action;
         return { register };
     }
-    const parser = (context: any, str: string) => {
-        const rx = /\${(.*?)\}/gm;
+    const rx = /\${(.*?)\}/gm;
+    function parseInternal(context: any, text: string, { onNotFound }: ParserOptions) {
         const matches = []
         let m: any;
+        const regex = new RegExp(rx);
         do {
-            m = rx.exec(str);
+            m = regex.exec(text);
             m != null && matches.push({
                 Full: m[0],
                 Data: m[1]
             })
-        } while (m)
-        let result = str;
+        } while (m);
+        let result = text;
         const extKeys = _.keys(ExtendCallbackRegistry);
         matches.forEach(({ Full, Data }) => {
             const options: ParserMethodOptions = {
@@ -76,15 +91,27 @@ export default () => {
                     const value = ExtendCallbackRegistry[extension](options);
                     result = result.replace(Full, value);
                 } else {
-                    result = result.replace(Full, _.at(context, [Data])[0] as any ?? "");
+                    result = result.replace(Full, _.at(context, [Data])[0] as any ?? onNotFound(options));
                 }
             }
         });
         return result;
-    };
-
+    }
     return {
-        parser,
+        parser(context: any, text: string, options?: Partial<ParserOptions>) {
+            const opts: ParserOptions = {
+                scans: 0,
+                onNotFound(opt) {
+                    return Number(options?.scans) > 0 ? opt.matchKey : ""
+                },
+                ...options
+            };
+            let value = parseInternal(context, text, opts);
+            for (let i = 1; i < opts.scans && rx.test(value); i++) {
+                value = parseInternal(context, value, opts);
+            }
+            return value;
+        },
         register,
     }
 };
